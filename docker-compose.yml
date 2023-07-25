@@ -1,14 +1,27 @@
-version: '3.8'
+version: "3.8"
 
 networks:
   default:
 
 services:
+  minio:
+    image: docker.io/bitnami/minio:2022
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: supersecret
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - "minio_data:/data"
+    networks:
+      - default
 
   mysql-db:
-    container_name:  mysql-db
+    container_name: mysql-db
     image: mysql:5.7
-    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # NOTE: use of "mysql_native_password" is 
+    # not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
     # (this is just an example, not intended to be a production configuration)
     command: --default-authentication-plugin=mysql_native_password
     restart: unless-stopped
@@ -45,11 +58,11 @@ services:
       - /app/node_modules
     networks:
       - default
-    
+
   nextjs-app:
     container_name: nextjs-app
-    # depends_on: 
-      # - nestjs-app
+    # depends_on:
+    # - nestjs-app
     build:
       context: ./nextjs-app
       dockerfile: Dockerfile
@@ -66,5 +79,7 @@ services:
     networks:
       - default
 
-volumes: 
+volumes:
   mysql-volume:
+  minio_data:
+    driver: local

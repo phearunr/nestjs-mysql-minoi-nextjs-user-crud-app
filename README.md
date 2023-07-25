@@ -48,6 +48,11 @@ Run `docker-compose up`
 
 ### Run the mysql-db
 
+`npm run start:minio` or 
+`docker-compose up minio`
+
+### Run the mysql-db
+
 `npm run start:db` or 
 `docker-compose up mysql-db`
 
